@@ -1,11 +1,41 @@
 header{
   background-color: green;
+  text-align: center;
 }
 
-footer {
-  background-color: green;
+#board {
+  height: 300px;
+  width : 350px;
+  margin: auto;
+  background: green;
+  border: 1px gray solid;
+  display: flex;
+  flex-wrap: wrap; /*wrap rows*/
+  flex-direction: row-reverse; /*ensure circles are in rows*/
+  justify-content: space-around; /*create space on all sides of circles*/
+}
+.square {
+  width: 13%; /*divide 100 by 7*/
+  height: 15%; /*divide 100 by 6*/
+  border: 1px black solid;
+  border-radius: 50%; /*make circles*/
+  background: white;
 }
 
-aside {
-  float: left;
+#buttonsRow {
+  height: 50px;
+  width : 350px;
+  margin: auto;
+  background: yellow;
+  border: 1px gray solid;
+  display: flex;
+  flex-wrap: wrap; /*wrap rows*/
+  flex-direction: column-reverse row; /*ensure circles are in rows*/
+  justify-content: space-around;
+}
+
+.button {
+  width: 13%;
+  height: 50%;
+  background: white;
 }
