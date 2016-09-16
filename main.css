@@ -3,6 +3,11 @@ header{
   text-align: center;
 }
 
+#buttonStart {
+  display: block;
+  margin: auto;
+}
+
 #board {
   height: 300px;
   width : 350px;
@@ -14,6 +19,7 @@ header{
   flex-direction: row-reverse; /*ensure circles are in rows*/
   justify-content: space-around; /*create space on all sides of circles*/
 }
+
 .square {
   width: 13%; /*divide 100 by 7*/
   height: 15%; /*divide 100 by 6*/
@@ -23,7 +29,7 @@ header{
 }
 
 #buttonsRow {
-  height: 50px;
+  height: 25px;
   width : 350px;
   margin: auto;
   background: yellow;
@@ -36,6 +42,6 @@ header{
 
 .button {
   width: 13%;
-  height: 50%;
+  height: 100%;
   background: white;
 }
