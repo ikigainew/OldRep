@@ -1,111 +1,134 @@
-//PseudoCode
-
-//MVP - minimum viable product
-
-var player 1 track places
-
-var player 2 track places
-
-var board [1,2,3,4,.......,42]
-
-var board column (1,2,3,4,5,6,7)
-
-var board row (1,2,3,4,5,6)
+$( function() {
 
 
-// An interactive board which renders on page load
-function buildBoard
-  Will need 7 columns 6 rows = 42 places to track
+
+  //MVP 1 - An interactive board which renders on page load
+  var board = function(){
+    for (var i = 1; i < 43; i++) {
+      var square = $("<div class='square'></div>");
+      square.attr('id', i);
+      $('#board').prepend(square);
+    };
+  }
+  board();
+
+  // MVP 2 -  A way for players to mark an empty space on their turn
+  var buttonsRow = function(){
+    for (var i = 1; i < 8; i++) {
+      var button = $("<button class='button' >Drop</button>");
+      button.attr('id', i);
+      button.on('click',console.log('clicked'));
+      $('#buttonsRow').append(button);
+      };
+    }
+    buttonsRow();
+});
+
+  // MVP 3 - The turns should alternate (red, black, red, black, etc.)
+      // var startGame = function () {
+      //   $buttonStart.on('click',console.log(clicked);)
+      // }
+      // startGame()
+
+  // MVP 4 - A player should not be able to mark a space that has already been played
+      // condition to play => value z === white
+      //
+      // }
 
 
-//A way for players to mark an empty space on their turn
-function placeToken
-          just 7 places available to place token
-          function track tokens places
+  // MVP 5 - The game should announce a winner if a player gets four tokens in a row, horizontally or vertically
+
+        LESSON LEARNT!
+        The approach to create a programm comes from:
+          1 - identify the problems/goals we want to achieve;
+                  in this case is to declare a winner
+          2 - identify the organization/structure/parameters of the dataset to achieve that!
+                  in this case became obvious we need location x,y and a state white,red,black for the 42 squares of the board
+          3 - Once the organization is done think about interaction with this dataset!
+                  Output: in this case declare winner when a condition is met
+                  Input: in this case how we change the z values inside the board
+          4 - once this is done create the visual interface so that a user can play!
+                  visualization of the dataset is the board
+                  to input a new value in z we have buttons that the user click and changes the value in z
+                  the output is when the final goal or condition is met, in this case is to declare a winner, (4 equal z values)
 
 
-//The turns should alternate (red, black, red, black, etc.)
-function alternate
+        Problem: to ensure programm is capable of find winner it needs to:
+          - know the location (x,y) and its state (white,red,black)
+
+        Solution: create positions/ coordinates and store a state!
+        the var 'board' should have 42 objects (will match the 42 divs),
+        each object has 3 keys&values => locationX, locationY, state(white,red,black) => (x,y,z) has values
+
+        var x = [1,2,3,4,5,6,7]     // must have 'x' for horizontal location
+        var y = [1,2,3,4,5,6]       // must have 'y' for vertical location
+        var z = [empty,red,black]   // must have 'z' for state storage & white means empty/free
+
+        var board = function(x,y,z)[
+          var 36={x=1, y=6, z=empty} var 37={x=2, y=6, z=empty} .......... var board42 = {x=7, y=6, z=empty}  // variable names canot start with a number
+          var 29={x=1, y=5, z=empty} var 30={x=2, y=5, z=empty} .......... var 35={x=7, y=6, z=empty}
+          var 22={x=1, y=4, z=empty} var 23={x=2, y=4, z=empty} .......... var 28={x=7, y=6, z=empty}
+          var 15={x=1, y=3, z=empty} var 16={x=2, y=3, z=empty} .......... var 21={x=7, y=6, z=empty}
+          var 08={x=1, y=2, z=empty} var 09={x=2, y=2, z=empty} .......... var 14={x=7, y=6, z=empty}
+          var board01={x=1, y=1, z=empty} var 02={x=2, y=1, z=empty} .......... var 07={x=7, y=6, z=empty}
+        ]
+
+var board
 
 
-//A player should not be able to mark a space that has already been played
-function placesAvailable =  [1,2,3,4,5,6,7]
-          after move, new array = previous array - chosen element + (chosen element + 7)
+        PROBLEM: "How to build this dinamically?" and "How to change/update a value rather than pushing a new value"
+        NOTE TO SELF: The programms is storing data in the "var board"! the layout/browser just displays the state of the "var board"!
+                      This means that each div will display color empty, red or black according to value of var status!
+                      So... each div will interact with the var with the same number in the object board!
+                      The user view in the browser is just a visualization of a set of parameters in a database...
 
 
-//The game should announce a winner if a player gets four tokens in a row, horizontally or vertically
-function checkIfFourInLine
-          horizontal solutions
-            [1,2,3,4; 2,3,4,5; 3,4,5,6; 4,5,6,7;]
-              create a loop and adding 7 to all number and run it 5 times
-              [8,9,10,11; .......]
-              [15,16,17,18; .....]
-              [22,23,24,25;......]
-              [29,30,31,32;......]
-              [36,37,38,39;......]
+        Next Problem: How to check the winner? The conditions that defines a winner are:
+                      when x remains the same, for consecutive y we have four equal z values except empty (vertically)
+                      when y remains the same, for consecutive x we have four equal z values except empty (horizontally)
+                      z = (red,red,red,red) or z = (black,black,black,black) consecutivelly
 
-              vertica solution;
-              [1,8,15,22; 8,15,22,29; 15,22,29,26]
-              create a loop add 1 nr to all 6 times
-              [2,9,16,23;........]
-              [3,10,17,24;.......]
-              [4,11,18,25;.......]
-              [5,12,19,26;.......]
-              [6,13,20,27;.......]
-              [7,14,21,28;.......]
+        Possible Solution for winner condition check:
+                when: after each turn, before the formula changeTurn run "checkWinner" function.
+                        this check is broken into 3 subformulas
+                          verticalCheck: check for x=1; y=1 and then++ , value of Z
+                            if value of Z appears four consecutive times => run formula "declareWinnervertical"
+                              if not, run formula changePlayerTurn
+                            do a loop for all x=[1,2,3,4,5,6,7]
+                          horizontalCheck: check for y=1; x=1 and then++ , value of Z
+                            if value of Z appears four consecutive times => run formula "declareWinnerHorizontal"
+                              if not, run formula changePlayerTurn
+                            do a loop for all y=[1,2,3,4,5,6]
+                          diagonalCheck: the tricky part here is that neither the 'x' or 'y' are constant!
+                              loop starting on (x=1,y=1) if there are 4 equal 'z' values for condition (x=+,y=+)
+                              loop starting on (x=1,y=1) if there are 4 equal 'z' values for condition (x=-,y=+)
 
-              Diagonal:
-              1	9	17	25			    4	10	16	22
-              2	10	18	26			 5	11	17	23
-              3	11	19	27			 6	12	18	24
-              4	12	20	28			 7	13	19	25
 
-              8	16	24	32			 11	17	23	29
-              9	17	25	33			 12	18	24	30
-              10	18	26	34		 13	19	25	31
-              11	19	27	35		 14	20	26	32
+          Next PROBLEM: How to change the values 'z' stored in the database (var board)? //"change z in 36=> board36[z] = red;"
+                        Conditions:
+                        'x'is defined by the button which is "clicked" location
+                        'y' always comes from bottom to top, (from 1 to 6), is defined by z = 'white'
+                        When function finds the first y with z=white, it changes the z to the colour of the player
+                        something like 'push.playercolour' that comes from var player1 = {colour: black} and var player2 = {colour: red}
+                        this also most comes from "who is playing condition"
 
-              15	23	31	39	   18 24	30	36
-              16	24	32	40		 19	25	31	37
-              17	25	33	41		 20	26	32	38
-              18	26	34	42		 21	27	33	39
+                when the function "dropToken" is 'clicked';
+                  if active player is red, then place red,  push red to object {x=1,y=1,z=red}
+                    if not, place black, push black to object {x=1,y=1,z=black};
 
-function announceWinner
+                      each button on top will be "connected" with a 'y' var to know in which column will the token be dropped
+                        the function drop will check the var z to see if the location is empty, this will be run in a sorted
+                          way for 'x'!
+                          so if user hits button for column 1 (y=1), then formula will check if var z for x1 equals empty,
+                            if not; move to x2;
+                              if not, move to x3;
+                                if not, move to x4;
+                                  if not, move to x5;
+                                    if not, move to x6;
+                                      if not, display "column full, choose another one";
 
-function newGame/clearResetBoard
 
-HTML:
 
-<!--
-<aside class="aside">
-  <div class="instructions">
-      Instructions:
-      <br>
-      1 - Write your names
-      <br>
-      2 - Press start new game
-      <br>
-      3 - Place 4 tokens in a row in any direction to wins
-      <br>
-      4 - To reset the score press New Match
-  </div>
-  <div class="settings">
-      settings
-  </div>
-</aside>
 
-<container>
-  <div class="score">
-      score
-  </div>
-  <div class="board">
-      board
-  </div>
-  <div class="display">
-      display
-  </div>
-</contanier>
 
-<footer>
-<h5>Footer - All Rights Reserved PP Inc. - Peter Productions</h5>
-</footer> -->
+formulas to build:
